@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>o4 mini weights</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 40px;
+        }
+        .timer-container {
+            margin: 30px 0;
+        }
+        #countdown {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #333;
+            margin: 20px 0;
+        }
+        .links-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 40px;
+        }
+        .link-item {
+            width: 200px;
+            margin-bottom: 30px;
+        }
+        .coming-soon {
+            font-weight: bold;
+            color: #ff4500;
+            font-size: 1.2em;
+            margin-top: 5px;
+        }
+        .timer-label {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>o4 mini weights</h1>
+    
+    <div class="timer-container">
+        <div class="timer-label">Countdown to 6:00 AM PT:</div>
+        <div id="countdown">Loading...</div>
+    </div>
+    
+    <div class="links-container">
+        <div class="link-item">
+            <h2>Torrent</h2>
+            <p class="coming-soon">COMING SOON!!!!</p>
+        </div>
+        
+        <div class="link-item">
+            <h2>OnionShare</h2>
+            <p class="coming-soon">COMING SOON!!!!</p>
+        </div>
+        
+        <div class="link-item">
+            <h2>HuggingFace</h2>
+            <p class="coming-soon">COMING SOON!!!!</p>
+        </div>
+    </div>
+
+    <script>
+        // Function to calculate and display the countdown to 6:00 AM PT
+        function updateCountdown() {
+            // Get current date and time
+            const now = new Date();
+            
+            // Create target time at 6:00 AM PT (UTC-7 or UTC-8 depending on daylight saving)
+            // Note: JavaScript handles the timezone conversion
+            const targetTime = new Date();
+            
+            // Check if we're in daylight saving time
+            // This is a simplified approach - actual DST rules are more complex
+            const isDST = (() => {
+                const jan = new Date(now.getFullYear(), 0, 1).getTimezoneOffset();
+                const jul = new Date(now.getFullYear(), 6, 1).getTimezoneOffset();
+                return Math.max(jan, jul) !== now.getTimezoneOffset();
+            })();
+            
+            // Set to 6:00 AM PT (changed from 18 to 6)
+            targetTime.setHours(6, 0, 0, 0);
+            
+            // Adjust for Pacific Time (UTC-7 during DST, UTC-8 during standard time)
+            // First convert to UTC
+            const targetUTC = new Date(targetTime.getTime() + now.getTimezoneOffset() * 60000);
+            
+            // Then adjust for Pacific Time
+            const ptOffset = isDST ? 7 : 8; // Hours behind UTC
+            const targetPT = new Date(targetUTC.getTime() - ptOffset * 3600000);
+            
+            // If target time has already passed today, set it for tomorrow
+            if (now > targetPT) {
+                targetPT.setDate(targetPT.getDate() + 1);
+            }
+            
+            // Calculate time difference in milliseconds
+            const timeDiff = targetPT - now;
+            
+            // Calculate hours, minutes, and seconds
+            const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+            
+            // Format the countdown display
+            const formattedTime = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Update the countdown element
+            document.getElementById('countdown').textContent = formattedTime;
+        }
+        
+        // Update the countdown immediately and then every second
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>
